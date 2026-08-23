@@ -47,9 +47,8 @@ for y in range(HEIGHT):
 
         brightness = pixels[x, y]
 
-        # IMPORTANT:
-        # Bright areas -> @, %, # etc.
-        # Dark areas -> spaces and light characters
+        # Bright areas -> dense characters
+        # Dark areas -> spaces/light characters
         index = int(
             brightness / 255 * (len(RAMP) - 1)
         )
@@ -89,11 +88,108 @@ width="{svg_width}"
 height="{svg_height}"
 viewBox="0 0 {svg_width} {svg_height}">
 
+<!-- ======================================
+     BACKGROUND
+====================================== -->
+
+<defs>
+
+    <!-- Dark gradient background -->
+    <linearGradient
+        id="bgGradient"
+        x1="0%"
+        y1="0%"
+        x2="100%"
+        y2="100%">
+
+        <stop
+            offset="0%"
+            stop-color="#0d1117"
+        />
+
+        <stop
+            offset="50%"
+            stop-color="#111827"
+        />
+
+        <stop
+            offset="100%"
+            stop-color="#0d1117"
+        />
+
+    </linearGradient>
+
+
+    <!-- Subtle technology grid -->
+    <pattern
+        id="grid"
+        width="40"
+        height="40"
+        patternUnits="userSpaceOnUse">
+
+        <path
+            d="M 40 0 L 0 0 0 40"
+            fill="none"
+            stroke="#58a6ff"
+            stroke-width="0.5"
+            opacity="0.12"
+        />
+
+    </pattern>
+
+
+    <!-- Blue glow -->
+    <radialGradient id="glow">
+
+        <stop
+            offset="0%"
+            stop-color="#58a6ff"
+            stop-opacity="0.12"
+        />
+
+        <stop
+            offset="100%"
+            stop-color="#0d1117"
+            stop-opacity="0"
+        />
+
+    </radialGradient>
+
+</defs>
+
+
+<!-- Main dark background -->
+
 <rect
     width="100%"
     height="100%"
-    fill="#0d1117"
+    fill="url(#bgGradient)"
 />
+
+
+<!-- Technology grid -->
+
+<rect
+    width="100%"
+    height="100%"
+    fill="url(#grid)"
+/>
+
+
+<!-- Subtle glow behind portrait -->
+
+<ellipse
+    cx="375"
+    cy="325"
+    rx="330"
+    ry="300"
+    fill="url(#glow)"
+/>
+
+
+<!-- ======================================
+     ASCII TEXT STYLE
+====================================== -->
 
 <style>
 
@@ -174,5 +270,5 @@ with open(
     file.write("\n".join(svg))
 
 
-print("ASCII portrait created successfully!")
+print("ASCII portrait with tech background created successfully!")
 print(f"Output: {OUTPUT}")
