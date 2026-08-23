@@ -1,20 +1,41 @@
 from PIL import Image
 import html
 
+# ==========================================
+# FILE SETTINGS
+# ==========================================
+
 INPUT = "source-prepped.png"
 OUTPUT = "avi-ascii.svg"
 
-# Bright to dark characters
+
+# ==========================================
+# ASCII SETTINGS
+# ==========================================
+
+# Bright pixels -> dense characters
+# Dark pixels -> sparse/empty characters
 RAMP = " .`:-=+*cs#%@"
 
 WIDTH = 90
 HEIGHT = 50
 
+
+# ==========================================
+# LOAD IMAGE
+# ==========================================
+
 image = Image.open(INPUT).convert("L")
 
+# Resize image to ASCII grid
 image = image.resize((WIDTH, HEIGHT))
 
 pixels = image.load()
+
+
+# ==========================================
+# CREATE ASCII ROWS
+# ==========================================
 
 rows = []
 
@@ -26,22 +47,39 @@ for y in range(HEIGHT):
 
         brightness = pixels[x, y]
 
+        # IMPORTANT:
+        # Bright areas -> @, %, # etc.
+        # Dark areas -> spaces and light characters
         index = int(
-            brightness / 256 * len(RAMP)
+            brightness / 255 * (len(RAMP) - 1)
         )
 
-        index = min(index, len(RAMP) - 1)
+        index = max(
+            0,
+            min(index, len(RAMP) - 1)
+        )
 
-        row += RAMP[index]
+        character = RAMP[index]
+
+        row += character
 
     rows.append(row)
 
+
+# ==========================================
+# SVG SETTINGS
+# ==========================================
 
 svg_width = 750
 svg_height = 650
 
 font_size = 11
 line_height = 12
+
+
+# ==========================================
+# START SVG
+# ==========================================
 
 svg = []
 
@@ -51,16 +89,28 @@ width="{svg_width}"
 height="{svg_height}"
 viewBox="0 0 {svg_width} {svg_height}">
 
-<rect width="100%" height="100%" fill="#0d1117"/>
+<rect
+    width="100%"
+    height="100%"
+    fill="#0d1117"
+/>
 
 <style>
+
 .text {{
-    font-family: monospace;
+    font-family: "Courier New", monospace;
     font-size: {font_size}px;
     fill: #d0d7de;
+    white-space: pre;
 }}
+
 </style>
 ''')
+
+
+# ==========================================
+# CREATE ANIMATED ASCII ROWS
+# ==========================================
 
 for i, row in enumerate(rows):
 
@@ -73,9 +123,10 @@ for i, row in enumerate(rows):
     svg.append(f'''
 
 <clipPath id="clip{i}">
+
     <rect
         x="20"
-        y="{y-font_size}"
+        y="{y - font_size}"
         width="0"
         height="{line_height}">
 
@@ -87,21 +138,32 @@ for i, row in enumerate(rows):
             dur="0.4s"
             fill="freeze"
         />
+
     </rect>
+
 </clipPath>
+
 
 <text
     x="20"
     y="{y}"
     class="text"
-    clip-path="url(#clip{i})">
-
-    {escaped}
-
-</text>
+    clip-path="url(#clip{i})">{escaped}</text>
 ''')
 
-svg.append("</svg>")
+
+# ==========================================
+# CLOSE SVG
+# ==========================================
+
+svg.append("""
+</svg>
+""")
+
+
+# ==========================================
+# SAVE SVG
+# ==========================================
 
 with open(
     OUTPUT,
@@ -111,4 +173,6 @@ with open(
 
     file.write("\n".join(svg))
 
-print("ASCII portrait created!")
+
+print("ASCII portrait created successfully!")
+print(f"Output: {OUTPUT}")
