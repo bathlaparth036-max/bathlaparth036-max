@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+    width="600" height="360"
+    viewBox="0 0 600 360">
+
+<style>
+    svg {
+        background: #0d1117;
+    }
+
+    .line {
+        fill: #c9d1d9;
+        font-family: monospace;
+        font-size: 20px;
+        opacity: 0;
+        animation: show 0.5s forwards;
+    }
+
+    @keyframes show {
+        from {
+            opacity: 0;
+            transform: translateX(-15px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+</style>
+
+<rect width="100%" height="100%" rx="15"
+      fill="#0d1117"
+      stroke="#30363d"
+      stroke-width="2"/>
+
+
+    <text x="30" y="50"
+          class="line"
+          style="animation-delay:0.0s">
+        Parth Bathla
+    </text>
+    
+    <text x="30" y="92"
+          class="line"
+          style="animation-delay:0.5s">
+        ────────────────────────
+    </text>
+    
+    <text x="30" y="134"
+          class="line"
+          style="animation-delay:1.0s">
+        Now: Computer Science Student
+    </text>
+    
+    <text x="30" y="176"
+          class="line"
+          style="animation-delay:1.5s">
+        Stack: Java • Python • HTML/CSS • MySQL
+    </text>
+    
+    <text x="30" y="218"
+          class="line"
+          style="animation-delay:2.0s">
+        Learning: DSA • AI • Web Development
+    </text>
+    
+    <text x="30" y="260"
+          class="line"
+          style="animation-delay:2.5s">
+        Projects: AI + IoT • Web Applications
+    </text>
+    
+    <text x="30" y="302"
+          class="line"
+          style="animation-delay:3.0s">
+        GitHub: bathlaparth036-max
+    </text>
+    
+
+</svg>
